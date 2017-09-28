@@ -15,7 +15,6 @@ import { connect } from 'react-redux'
 import { actions } from '../store'
 import AddRatForm from './AddRatForm'
 import Component from './Component'
-import RatDetails from './RatDetails'
 
 
 
@@ -54,14 +53,6 @@ class UserRatsPanel extends Component {
     )
   }
 
-  _renderSubcomponent (row) {
-    let ships = row.original.relationships.ships.data.map(({ id }) => this.props.ships.ships.find(ship => ship.id === id))
-
-    return (
-      <RatDetails ships={ships} />
-    )
-  }
-
 
 
 
@@ -73,7 +64,9 @@ class UserRatsPanel extends Component {
   constructor (props) {
     super(props)
 
-    this._bindMethods(['onSubmit', '_renderSubcomponent'])
+    this._bindMethods([
+      'onSubmit',
+    ])
 
     this.state = {
       name: '',
@@ -122,8 +115,7 @@ class UserRatsPanel extends Component {
           data={rats.rats}
           defaultPageSize={rats.rats.length}
           manual
-          showPagination={false}
-          SubComponent={this._renderSubcomponent}/>
+          showPagination={false} />
         <AddRatForm />
       </div>
     )
@@ -188,7 +180,6 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   let {
     rats,
-    ships,
     user,
   } = state
 
@@ -198,7 +189,6 @@ const mapStateToProps = state => {
 
   return {
     rats,
-    ships,
   }
 }
 

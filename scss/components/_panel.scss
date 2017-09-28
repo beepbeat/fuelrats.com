@@ -6,36 +6,38 @@
     margin-bottom: 0;
   }
 
-  footer,
-  header,
-  .panel-header,
-  .panel-footer {
-    background-color: $black;
-    color: $white;
-    padding: 1rem;
-    position: relative;
+  > {
+    footer,
+    header,
+    .panel-header,
+    .panel-footer {
+      background-color: $black;
+      color: $white;
+      padding: 1rem;
+      position: relative;
 
-    &:empty {
-      display: none;
+      &:empty {
+        display: none;
+      }
     }
-  }
 
-  header,
-  .panel-header {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
+    header,
+    .panel-header {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
 
-    menu {
-      padding: 0;
+      menu {
+        padding: 0;
+      }
     }
-  }
 
-  footer,
-  .panel-footer {}
+    footer,
+    .panel-footer {}
 
-  .panel-content {
-    overflow: auto;
-    padding: 1rem;
+    .panel-content {
+      overflow: auto;
+      padding: 1rem;
+    }
   }
 }

@@ -35,15 +35,17 @@ class UserShipsPanel extends Component {
 
       console.log('ship', ship)
 
-      let badgeClasses = ['badge', 'platform', 'short', platform].join(' ')
-
       return (
-        <li key={index}>
-          <div className={badgeClasses}></div>
+        <li
+          className="card ship"
+          key={index}>
+          <header>
+            {name}
 
-          <Link href={`/rats/${id}`}>
-            <a>{name}</a>
-          </Link>
+            <small>{ship.attributes.shipType}</small>
+          </header>
+
+          <img src={`//edassets.org/img/ship-schematics/arithon/${ship.attributes.shipType.toLowerCase().replace(/\s/g, '-')}.svg`} />
         </li>
       )
     })
@@ -61,21 +63,17 @@ class UserShipsPanel extends Component {
     let { ships } = this.props
 
     return (
-      <div className="panel user-ships">
-        <header>Ships</header>
-
-        <div className="panel-content">
-          <div className="row">
-            <ul>
-              {!ships.retrieving && this._renderShips(ships.ships)}
-            </ul>
-          </div>
-
-          <form className="row">
-            <input className="stretch-9" name="add-ship" placeholder="Add a ship..." type="text" />
-            <button data-action="add-ship" type="submit">Add</button>
-          </form>
+      <div className="user-ships">
+        <div className="row">
+          <ul className="ships">
+            {!ships.retrieving && this._renderShips(ships.ships)}
+          </ul>
         </div>
+
+        <form className="row">
+          <input className="stretch-9" name="add-ship" placeholder="Add a ship..." type="text" />
+          <button data-action="add-ship" type="submit">Add</button>
+        </form>
       </div>
     )
   }

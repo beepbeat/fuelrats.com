@@ -11,6 +11,7 @@ import TabbedPanel from '../components/TabbedPanel'
 import UserOverview from '../components/UserOverview'
 import UserRatsPanel from '../components/UserRatsPanel'
 import UserSettings from '../components/UserSettings'
+import UserShipsPanel from '../components/UserShipsPanel'
 import UserStatsOverview from '../components/UserStatsOverview'
 
 
@@ -64,6 +65,10 @@ class Profile extends React.Component {
       {
         component: (<UserRatsPanel />),
         title: 'Rats',
+      },
+      {
+        component: (<UserShipsPanel />),
+        title: 'Ships',
       },
 //      {
 //        component: (<UserStatsOverview />),
