@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import _ from 'lodash'
 import Link from 'next/link'
 import React from 'react'
+import ReactTable from 'react-table'
 import { connect } from 'react-redux'
 
 
@@ -23,32 +24,32 @@ class UserShipsPanel extends Component {
     Public Methods
   \***************************************************************************/
 
-  _renderShips (ships) {
-    return ships.map((ship, index) => {
-      let {
-        id,
-      } = ship
-      let {
-        name,
-        platform,
-      } = ship.attributes
+  _renderIDRow (row) {
+    let ship = row.original
+    let shipId = ship.attributes.shipId.toString()
 
-      console.log('ship', ship)
+    while (shipId.length < 4) {
+      shipId = `0${shipId}`
+    }
 
-      return (
-        <li
-          className="card ship"
-          key={index}>
-          <header>
-            {name}
+    return (
+      <span>
+        FR{shipId}
+      </span>
+    )
+  }
 
-            <small>{ship.attributes.shipType}</small>
-          </header>
+  _renderShipTypeRow (row) {
+    let ship = row.original
 
-          <img src={`//edassets.org/img/ship-schematics/arithon/${ship.attributes.shipType.toLowerCase().replace(/\s/g, '-')}.svg`} />
-        </li>
-      )
-    })
+    return (
+      <span>
+        <img
+          hidden={true}
+          src={`//edassets.org/img/ship-schematics/arithon/${ship.attributes.shipType.toLowerCase().replace(/\s/g, '-')}.svg`} />
+        {ship.attributes.shipType}
+      </span>
+    )
   }
 
 
@@ -59,25 +60,96 @@ class UserShipsPanel extends Component {
     Public Methods
   \***************************************************************************/
 
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      loading: false,
+    }
+  }
+
   render () {
     let { ships } = this.props
+    let { loading } = this.state
 
     return (
-      <div className="user-ships">
-        <div className="row">
-          <ul className="ships">
-            {!ships.retrieving && this._renderShips(ships.ships)}
-          </ul>
-        </div>
-
-        <form className="row">
-          <input className="stretch-9" name="add-ship" placeholder="Add a ship..." type="text" />
-          <button data-action="add-ship" type="submit">Add</button>
-        </form>
-      </div>
+      <ReactTable
+        className="panel user-ships"
+        columns={this.columns}
+        data={ships}
+        defaultPageSize={10}
+        loading={loading}
+        manual
+        minRows={5}
+        noDataText={`No ships registered`}
+        showPagination={false} />
     )
   }
+
+
+
+
+
+  /***************************************************************************\
+    Getters
+  \***************************************************************************/
+
+  get columns () {
+    return [
+      {
+        accessor: 'attributes.shipId',
+        Cell: this._renderIDRow,
+        className: 'id',
+        Header: 'FRID',
+        headerClassName: 'id',
+        id: 'id',
+        resizable: false,
+        sortable: true,
+        width: 100,
+      },
+      {
+        accessor: 'attributes.name',
+        className: 'name',
+        Header: 'Name',
+        headerClassName: 'name',
+        id: 'name',
+        resizable: true,
+        sortable: true,
+      },
+      {
+        accessor: 'attributes.shipType',
+        Cell: this._renderShipTypeRow,
+        className: 'type',
+        Header: 'Type',
+        headerClassName: 'type',
+        id: 'type',
+        resizable: true,
+        sortable: true,
+      },
+      {
+        accessor: 'attributes.owner',
+        className: 'owner',
+        Header: 'Owner',
+        headerClassName: 'owner',
+        id: 'owner',
+        resizable: true,
+        sortable: true,
+      },
+    ]
+  }
 }
+//      <div className="user-ships">
+//        <div className="row">
+//          <ul className="ships">
+//            {!ships.retrieving && this._renderShips(ships.ships)}
+//          </ul>
+//        </div>
+//
+//        <form className="row">
+//          <input className="stretch-9" name="add-ship" placeholder="Add a ship..." type="text" />
+//          <button data-action="add-ship" type="submit">Add</button>
+//        </form>
+//      </div>
 
 
 
@@ -85,22 +157,18 @@ class UserShipsPanel extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getRats: bindActionCreators(actions.getRats, dispatch),
+    createShip: bindActionCreators(actions.createShip, dispatch),
   }
 }
 
 const mapStateToProps = state => {
-  let {
-    ships,
-    user,
-  } = state
+  let newState = Object.assign({}, state.ships)
 
-  console.log('state', state)
+  newState.ships.forEach(ship => {
+    ship.attributes.owner = state.rats.rats.find(rat => rat.id = ship.attributes.ratId).attributes.name
+  })
 
-  return {
-    ships,
-    user,
-  }
+  return newState
 }
 
 
