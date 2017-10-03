@@ -13,9 +13,7 @@ import withRedux from 'next-redux-wrapper'
 import { actions } from '../../store'
 import Component from '../../components/Component'
 import Page from '../../components/Page'
-import FirstLimpetInput from '../../components/FirstLimpetInput'
-import RatTagsInput from '../../components/RatTagsInput'
-import SystemTagsInput from '../../components/SystemTagsInput'
+import TagsInput from '../../components/TagsInput'
 
 
 
@@ -29,6 +27,63 @@ const title = 'Paperwork'
 
 
 class Paperwork extends Component {
+
+  /***************************************************************************\
+    Public Methods
+  \***************************************************************************/
+
+  async _ratSearch (query) {
+    this.setState({ loading: true })
+
+    if (query) {
+      let response = await fetch(`/api/rats?limit=10&platform=${this.props['data-platform']}&name.ilike=${query}%`)
+      let {
+        data,
+      } = await response.json()
+
+      if (!data.length) {
+        return this.updateOptions([])
+      }
+
+      return this.updateOptions(data)
+    }
+
+    this.updateOptions([])
+  }
+
+  _renderTagsInputLoader () {
+    return (
+      <span>
+        <i className="fa fa-fw fa-pulse fa-spinner" />
+        Loading...
+      </span>
+    )
+  }
+
+  _renderRatTagsInputValue (rat) {
+    let badgeClasses = ['badge', 'platform', 'short', rat.attributes.platform]
+
+    return (
+      <span><span className={badgeClasses.join(' ')} /> {rat.attributes.name}</span>
+    )
+  }
+
+  async _systemSearch (query) {
+    if (query) {
+      let response = await fetch(`/edsm-api/typeahead/systems/query/${query}`)
+      response = await response.json()
+
+      if (!response) {
+        response = []
+      }
+
+      this.updateOptions(response)
+    }
+  }
+
+
+
+
 
   /***************************************************************************\
     Public Methods
@@ -329,35 +384,43 @@ class Paperwork extends Component {
             <fieldset>
               <label htmlFor="rats">Who arrived for the rescue?</label>
 
-              <RatTagsInput
+              <TagsInput
                 data-platform={rescue.attributes.platform}
                 disabled={submitting || retrieving}
                 name="rats"
                 onChange={this.handleRatsChange}
-                value={rats} />
+                renderLoader={this._renderTagsInputLoader}
+                renderValue={this._renderRatTagsInputValue}
+                search={this._ratSearch}
+                value={rats}
+                valueProp="attributes.name" />
             </fieldset>
 
             <fieldset>
               <label htmlFor="firstLimpet">Who fired the first limpet?</label>
 
-              <FirstLimpetInput
+              <TagsInput
                 data-single
                 disabled={submitting || retrieving}
                 name="firstLimpet"
                 onChange={this.handleFirstLimpetChange}
                 options={rats}
-                value={firstLimpet} />
+                renderLoader={this._renderTagsInputLoader}
+                renderValue={this._renderRatTagsInputValue}
+                value={firstLimpet}
+                valueProp="attributes.name" />
             </fieldset>
 
             <fieldset>
               <label htmlFor="system">Where did it happen? <small>In what star system did the rescue took place? (put "n/a" if not applicable)</small></label>
 
-              <SystemTagsInput
-                data-allowNew={true}
+              <TagsInput
+                allowNew={true}
                 disabled={submitting || retrieving}
+                data-single
                 name="system"
                 onChange={this.handleSystemChange}
-                data-single
+                search={this._systemSearch}
                 value={(rescue && rescue.attributes) ? rescue.attributes.system : null} />
             </fieldset>
 

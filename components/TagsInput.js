@@ -19,9 +19,11 @@ export default class extends React.Component {
   }
 
   _renderLoader () {
+    let renderLoaderMethod = this.props.renderLoader || this.renderLoader
+
     return (
       <div className="loader">
-        {this.renderLoader()}
+        {this.props.renderLoaderMethod()}
       </div>
     )
   }
@@ -32,6 +34,19 @@ export default class extends React.Component {
         {this.renderNoResults()}
       </div>
     )
+  }
+
+  _renderValue (original) {
+    let value
+
+    if (this.props.renderValue) {
+      value = this.props.renderValue(original)
+
+    } else {
+      value = this.renderValue(original)
+    }
+
+    return value
   }
 
 
@@ -143,7 +158,7 @@ export default class extends React.Component {
       'shouldCaptureKeybind',
     ])
 
-    this.search = debounce(this.search, props.searchDebounce || 500)
+    this.search = debounce((this.props.search || this.search), props.searchDebounce || 500)
 
     let tags = props.value || []
 
@@ -154,8 +169,8 @@ export default class extends React.Component {
     tags = tags.map(tag => this.parseOption(tag))
 
     this.state = {
-      allowDuplicates: props['data-allowDuplicates'],
-      allowNew: props['data-allowNew'],
+      allowDuplicates: props['allowDuplicates'],
+      allowNew: props['allowNew'],
       currentValue: '',
       debug: props.debug,
       focused: false,
@@ -459,17 +474,22 @@ export default class extends React.Component {
 
     let divProps = Object.assign({}, this.props)
 
+    delete divProps.allowNew
     delete divProps.onAdd
     delete divProps.onChange
     delete divProps.onRemove
     delete divProps.options
+    delete divProps.renderLoader
+    delete divProps.renderValue
+    delete divProps.search
+    delete divProps.valueProp
 
     return (
       <div {...divProps} className={classes.join(' ')}>
         <ul className="tags">{this.renderTags()}</ul>
 
         <input
-          autoComplete={false}
+          autoComplete="off"
           name={name}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
@@ -523,7 +543,7 @@ export default class extends React.Component {
         onMouseDown={() => this.addTag(option)}
         onMouseOut={this.handleOptionMouseOut}
         onMouseOver={event => this.handleOptionMouseOver(event, index)}>
-        {this.renderValue(option)}
+        {this._renderValue(option)}
       </li>
     )
   }
@@ -567,7 +587,7 @@ export default class extends React.Component {
 
     return (
       <li className={classes.join(' ')} key={index}>
-        {this.renderValue(tag)}
+        {this._renderValue(tag)}
 
         <button
           onClick={() => this.removeTag(tag)}
@@ -650,6 +670,6 @@ export default class extends React.Component {
   }
 
   get valueProp () {
-    return 'value'
+    return this.props.valueProp || 'value'
   }
 }
