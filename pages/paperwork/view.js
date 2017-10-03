@@ -13,9 +13,6 @@ import withRedux from 'next-redux-wrapper'
 import { actions } from '../../store'
 import Component from '../../components/Component'
 import Page from '../../components/Page'
-import FirstLimpetInput from '../../components/FirstLimpetInput'
-import RatTagsInput from '../../components/RatTagsInput'
-import SystemTagsInput from '../../components/SystemTagsInput'
 
 
 
