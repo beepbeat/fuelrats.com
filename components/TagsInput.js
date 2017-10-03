@@ -23,7 +23,7 @@ export default class extends React.Component {
 
     return (
       <div className="loader">
-        {this.props.renderLoaderMethod()}
+        {renderLoaderMethod()}
       </div>
     )
   }
@@ -146,6 +146,9 @@ export default class extends React.Component {
     super(props)
 
     this._bindMethods([
+      '_renderLoader',
+      '_renderNoResults',
+      '_renderValue',
       'handleOptionMouseOut',
       'handleOptionMouseOver',
       'onBlur',
