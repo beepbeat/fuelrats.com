@@ -485,6 +485,7 @@ export default class extends React.Component {
     delete divProps.renderLoader
     delete divProps.renderValue
     delete divProps.search
+    delete divProps.searchDebounce
     delete divProps.valueProp
 
     return (
