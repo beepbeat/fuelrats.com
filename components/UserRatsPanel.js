@@ -113,7 +113,7 @@ class UserRatsPanel extends Component {
           className="user-rats"
           columns={this.columns}
           data={rats.rats}
-          defaultPageSize={rats.rats.length}
+          defaultPageSize={rats.rats.length || 5}
           manual
           showPagination={false} />
         <AddRatForm />
