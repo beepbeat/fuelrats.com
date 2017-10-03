@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 
 // Module imports
 import { actions } from '../store'
+import AddShipForm from './AddShipForm'
 import Component from './Component'
 
 
@@ -73,16 +74,18 @@ class UserShipsPanel extends Component {
     let { loading } = this.state
 
     return (
-      <ReactTable
-        className="panel user-ships"
-        columns={this.columns}
-        data={ships}
-        defaultPageSize={10}
-        loading={loading}
-        manual
-        minRows={5}
-        noDataText={`No ships registered`}
-        showPagination={false} />
+      <div className="panel">
+        <ReactTable
+          className="user-ships"
+          columns={this.columns}
+          data={ships}
+          defaultPageSize={ships.length || 5}
+          loading={loading}
+          manual
+          noDataText={`No ships registered`}
+          showPagination={false} />
+        <AddShipForm />
+      </div>
     )
   }
 
@@ -138,28 +141,10 @@ class UserShipsPanel extends Component {
     ]
   }
 }
-//      <div className="user-ships">
-//        <div className="row">
-//          <ul className="ships">
-//            {!ships.retrieving && this._renderShips(ships.ships)}
-//          </ul>
-//        </div>
-//
-//        <form className="row">
-//          <input className="stretch-9" name="add-ship" placeholder="Add a ship..." type="text" />
-//          <button data-action="add-ship" type="submit">Add</button>
-//        </form>
-//      </div>
 
 
 
 
-
-const mapDispatchToProps = dispatch => {
-  return {
-    createShip: bindActionCreators(actions.createShip, dispatch),
-  }
-}
 
 const mapStateToProps = state => {
   let newState = Object.assign({}, state.ships)
@@ -175,4 +160,4 @@ const mapStateToProps = state => {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserShipsPanel)
+export default connect(mapStateToProps)(UserShipsPanel)
