@@ -84,7 +84,9 @@ class UserShipsPanel extends Component {
           manual
           noDataText={`No ships registered`}
           showPagination={false} />
-        <AddShipForm />
+        <div className="panel-footer">
+          <AddShipForm />
+        </div>
       </div>
     )
   }

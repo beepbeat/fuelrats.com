@@ -154,7 +154,6 @@ class AddRatForm extends Component {
 
     return (
       <form
-        className="add-rat"
         onSubmit={this.onSubmit}>
         <div className="stretch-12">
           <label htmlFor="add-ship">Add a ship</label>
