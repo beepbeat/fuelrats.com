@@ -460,7 +460,9 @@ export default class extends React.Component {
   render () {
     let {
       className,
+      disabled,
       name,
+      placeholder,
     } = this.props
     let {
       allowNew,
@@ -494,11 +496,13 @@ export default class extends React.Component {
 
         <input
           autoComplete="off"
+          disabled={disabled}
           name={name}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
           onInput={this.onInput}
           onKeyDown={this.onKeyDown}
+          placeholder={placeholder}
           ref={input => this.input = input}
           type="search" />
 
