@@ -1,0 +1,36 @@
+.text-danger {
+  color: $red;
+}
+
+.text-info {
+  color: $blue;
+}
+
+.text-muted {
+  color: $grey;
+}
+
+.text-success {
+  color: $green;
+}
+
+.text-warning {
+  color: $yellow;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-space-right {
+  padding-right: 1rem;
+}
+
+
+.text-mono {
+  font-family: 'Operator Mono', 'SF Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Consolas, monospace, sans-serif;
+}

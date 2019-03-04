@@ -1,0 +1,19 @@
+a {
+  color: $red;
+  text-decoration: none;
+  transition: all 0.2s;
+
+  &:focus,
+  &:hover {
+    color: $black;
+    outline: none;
+  }
+
+  &.icon {
+    color: $black;
+
+    &:hover {
+      color: $red;
+    }
+  }
+}
